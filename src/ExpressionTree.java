@@ -65,28 +65,32 @@ public class ExpressionTree {
             while (node != null) {
                 if (checkSign(node.getValue().charAt(0))) {
                     if (precedence(c) < precedence(node.getValue().charAt(0))) {
-                        Node newNode = new Node(String.valueOf(c), node, null, node.getParent());
-                        if (node.getParent() != null) node.getParent().setRhsNode(newNode);
-                        return node.setParent(newNode);
+                        return createNInsert(node, String.valueOf(c));
                     } else {
-                        if(node.getLhsNode() == null) {
-                            Node n = new Node(String.valueOf(c),node);
-                            return node.setLhsNode(n);
-                        }
-                        if (node.getRhsNode() == null)
-                            return node.setRhsNode(new Node(String.valueOf(c),node));
+                         if(checkLR(node,String.valueOf(c))) return true;
                         node = node.getRhsNode();
                     }
                 } else {
-                    Node newNode = new Node(String.valueOf(c), node.getParent());
-                    newNode.setLhsNode(node);
-                    if(node.getParent() != null) node.getParent().setRhsNode(newNode);
-                    return node.setParent(newNode);
+                    return createNInsert(node,String.valueOf(c));
                 }
             }
 
         }
         return false;
+     }
+
+     private boolean createNInsert(Node node, String c) {
+         Node newNode = new Node(c, node, null, node.getParent());
+         if(node.getParent() != null) node.getParent().setRhsNode(newNode);
+         return node.setParent(newNode);
+     }
+
+     private boolean checkLR(Node node, String c) {
+         if(node.getLhsNode() == null)
+             return node.setLhsNode(new Node(c,node));
+         if (node.getRhsNode() == null)
+             return node.setRhsNode(new Node(c,node));
+         return false;
      }
 
      private boolean insertNum(String c) {
@@ -97,10 +101,7 @@ public class ExpressionTree {
              Node node = root;
              while (node != null) {
                  if (checkSign(node.getValue().charAt(0))) {
-                     if(node.getLhsNode() == null)
-                         return node.setLhsNode(new Node(String.valueOf(c),node));
-                     if (node.getRhsNode() == null)
-                         return node.setRhsNode(new Node(String.valueOf(c),node));
+                     if(checkLR(node,c)) return true;
                      node = node.getRhsNode();
                  }
              }
