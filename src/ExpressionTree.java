@@ -12,6 +12,7 @@ public class ExpressionTree {
      }
 
      private boolean checkSign(char c) {
+        if((int)c == 46) return false;
         return ((int)c >= 42 && (int)c <= 47);
      }
 
@@ -30,13 +31,13 @@ public class ExpressionTree {
                 char nextSign = RE.charAt(i++);
                 insertSign(nextSign);
                 refreshRoot();
-            } else { // if(checkNum(String.valueOf(RE.charAt(i))))
-                int nextNum = 0;
+            } else {
+                StringBuilder nextNum = new StringBuilder(5);
                 do {
-                    nextNum = nextNum*10 + Integer.parseInt(String.valueOf(RE.charAt(i++)));
+                    nextNum.append(RE.charAt(i++));
                     if(i >= RE.length()) break;
                 } while(!checkSign(RE.charAt(i)));
-                insertNum(""+nextNum);
+                insertNum(String.valueOf(nextNum));
                 refreshRoot();
             }
         }

@@ -8,7 +8,7 @@ public class Main {
         System.out.print("Enter the Regular Expression : ");
         String RE = sc.next(); // 12/3+3*12-6+5*2/3   Ans : + / 12 3 + - * 3 12 6 / * 5 2 3
 
-        String expressionFormat = "[[0-9]*[+*/-][0-9]*]*";
+        String expressionFormat = "[[0-9]*\\.?[0-9]*[+*/-][0-9]*\\.?[0-9]*]*";
         Pattern pattern = Pattern.compile(expressionFormat);
         Matcher matcher = pattern.matcher(RE);
 
@@ -16,7 +16,7 @@ public class Main {
             ExpressionTree exp = new ExpressionTree(RE);
             exp.make();
             exp.initializePrinting();
-        }
+        } else System.out.println("Expression doesn't match.");
 
 
 
