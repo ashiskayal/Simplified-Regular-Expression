@@ -1,5 +1,4 @@
 public class ExpressionTree {
-
     private final String RE;
     private Node root;
 
@@ -12,16 +11,8 @@ public class ExpressionTree {
         while(root.getParent() != null) root = root.getParent();
      }
 
-     public void make() {
-        create();
-     }
-
      private boolean checkSign(char c) {
         return ((int)c >= 42 && (int)c <= 47);
-     }
-
-     private boolean checkNum(String c) {
-         return ((int)c.charAt(0) >= 48 && (int)c.charAt(0) <= 57);
      }
 
      private int precedence(char c) {
@@ -33,17 +24,16 @@ public class ExpressionTree {
              default -> -1;
          };
      }
-     private void create() {
+     public void make() {
         for(int i=0; i<this.RE.length();) {
             if(checkSign(RE.charAt(i))) {
                 char nextSign = RE.charAt(i++);
                 insertSign(nextSign);
                 refreshRoot();
-            } else if(checkNum(String.valueOf(RE.charAt(i)))) {
+            } else { // if(checkNum(String.valueOf(RE.charAt(i))))
                 int nextNum = 0;
                 do {
-                    nextNum *= 10;
-                    nextNum += Integer.parseInt(String.valueOf(RE.charAt(i++)));
+                    nextNum = nextNum*10 + Integer.parseInt(String.valueOf(RE.charAt(i++)));
                     if(i >= RE.length()) break;
                 } while(!checkSign(RE.charAt(i)));
                 insertNum(""+nextNum);
@@ -53,10 +43,7 @@ public class ExpressionTree {
      }
 
      private boolean insertSign(char c) {
-        if(this.root == null) {
-            this.root = new Node(String.valueOf(c),null);
-            return true;
-        } else {
+        if(this.root != null) {
             Node node = root;
             while (node.getLhsNode() != null && !checkSign(node.getValue().charAt(0))) {
                 if(node.getRhsNode() != null) node = node.getRhsNode();
@@ -66,38 +53,18 @@ public class ExpressionTree {
                 if (checkSign(node.getValue().charAt(0))) {
                     if (precedence(c) < precedence(node.getValue().charAt(0))) {
                         return createNInsert(node, String.valueOf(c));
-                    } else {
-                         if(checkLR(node,String.valueOf(c))) return true;
-                        node = node.getRhsNode();
-                    }
-                } else {
+                    } else if(checkLR(node,String.valueOf(c))) return true;
+                    node = node.getRhsNode();
+                } else
                     return createNInsert(node,String.valueOf(c));
-                }
             }
-
         }
-        return false;
-     }
-
-     private boolean createNInsert(Node node, String c) {
-         Node newNode = new Node(c, node, null, node.getParent());
-         if(node.getParent() != null) node.getParent().setRhsNode(newNode);
-         return node.setParent(newNode);
-     }
-
-     private boolean checkLR(Node node, String c) {
-         if(node.getLhsNode() == null)
-             return node.setLhsNode(new Node(c,node));
-         if (node.getRhsNode() == null)
-             return node.setRhsNode(new Node(c,node));
-         return false;
+         this.root = new Node(String.valueOf(c),null);
+         return true;
      }
 
      private boolean insertNum(String c) {
-         if(this.root == null) {
-             this.root = new Node(c,null);
-             return true;
-         } else {
+         if(this.root != null) {
              Node node = root;
              while (node != null) {
                  if (checkSign(node.getValue().charAt(0))) {
@@ -106,9 +73,21 @@ public class ExpressionTree {
                  }
              }
          }
-        return false;
+         this.root = new Node(c,null);
+         return true;
      }
 
+    private boolean createNInsert(Node node, String c) {
+        Node newNode = new Node(c, node, null, node.getParent());
+        if(node.getParent() != null) node.getParent().setRhsNode(newNode);
+        return node.setParent(newNode);
+    }
+
+    private boolean checkLR(Node node, String c) {
+        if(node.getLhsNode() == null) return node.setLhsNode(new Node(c,node));
+        if (node.getRhsNode() == null) return node.setRhsNode(new Node(c,node));
+        return false;
+    }
      public void initializePrinting() {
         printTree(root);
      }
@@ -119,5 +98,4 @@ public class ExpressionTree {
             printTree(n.getRhsNode());
         }
      }
-
 }
