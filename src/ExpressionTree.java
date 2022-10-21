@@ -1,19 +1,11 @@
 public class ExpressionTree {
 
-    private String RE;
+    private final String RE;
     private Node root;
 
     public ExpressionTree(String RE) {
         this.RE = RE;
         this.root = null;
-    }
-
-    public String getRE() {
-        return RE;
-    }
-
-    public void setRE(String RE) {
-        this.RE = RE;
     }
 
     private void refreshRoot() {
@@ -62,8 +54,7 @@ public class ExpressionTree {
 
      private boolean insertSign(char c) {
         if(this.root == null) {
-            Node n = new Node(String.valueOf(c),null);
-            this.root = n;
+            this.root = new Node(String.valueOf(c),null);
             return true;
         } else {
             Node node = root;
@@ -82,10 +73,8 @@ public class ExpressionTree {
                             Node n = new Node(String.valueOf(c),node);
                             return node.setLhsNode(n);
                         }
-                        if (node.getRhsNode() == null) {
-                            Node n = new Node(String.valueOf(c),node);
-                            return node.setRhsNode(n);
-                        }
+                        if (node.getRhsNode() == null)
+                            return node.setRhsNode(new Node(String.valueOf(c),node));
                         node = node.getRhsNode();
                     }
                 } else {
@@ -108,15 +97,10 @@ public class ExpressionTree {
              Node node = root;
              while (node != null) {
                  if (checkSign(node.getValue().charAt(0))) {
-
-                     if(node.getLhsNode() == null) {
-                         Node n = new Node(String.valueOf(c),node);
-                         return node.setLhsNode(n);
-                     }
-                     if (node.getRhsNode() == null) {
-                         Node n = new Node(String.valueOf(c),node);
-                         return node.setRhsNode(n);
-                     }
+                     if(node.getLhsNode() == null)
+                         return node.setLhsNode(new Node(String.valueOf(c),node));
+                     if (node.getRhsNode() == null)
+                         return node.setRhsNode(new Node(String.valueOf(c),node));
                      node = node.getRhsNode();
                  }
              }

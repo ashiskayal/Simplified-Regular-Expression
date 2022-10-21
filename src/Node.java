@@ -1,5 +1,5 @@
 public class Node {
-    private String value;
+    private final String value;
     private Node lhsNode, rhsNode, parent;
 
     public Node(String value, Node lhsNode, Node rhsNode, Node parent) {
@@ -16,11 +16,6 @@ public class Node {
 
     public String getValue() {
         return value;
-    }
-
-    public boolean setValue(String value) {
-        this.value = value;
-        return true;
     }
 
     public Node getLhsNode() {
