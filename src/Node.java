@@ -49,4 +49,9 @@ public class Node {
         this.parent = parent;
         return true;
     }
+
+    @Override
+    public String toString() {
+        return this.getValue();
+    }
 }
