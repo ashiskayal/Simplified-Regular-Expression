@@ -18,31 +18,35 @@ public class Node {
         return value;
     }
 
-    public void setValue(String value) {
+    public boolean setValue(String value) {
         this.value = value;
+        return true;
     }
 
     public Node getLhsNode() {
         return lhsNode;
     }
 
-    public void setLhsNode(Node lhsNode) {
+    public boolean setLhsNode(Node lhsNode) {
         this.lhsNode = lhsNode;
+        return true;
     }
 
     public Node getRhsNode() {
         return rhsNode;
     }
 
-    public void setRhsNode(Node rhsNode) {
+    public boolean setRhsNode(Node rhsNode) {
         this.rhsNode = rhsNode;
+        return true;
     }
 
     public Node getParent() {
         return parent;
     }
 
-    public void setParent(Node parent) {
+    public boolean setParent(Node parent) {
         this.parent = parent;
+        return true;
     }
 }
