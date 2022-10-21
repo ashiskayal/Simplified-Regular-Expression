@@ -16,8 +16,6 @@ public class Main {
             ExpressionTree exp = new ExpressionTree(RE);
             exp.make();
             exp.initializePrinting();
-            System.out.println();
-            exp.printParents();
         }
 
 

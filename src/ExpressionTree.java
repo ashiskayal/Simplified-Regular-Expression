@@ -45,7 +45,7 @@ public class ExpressionTree {
         for(int i=0; i<this.RE.length();) {
             if(checkSign(RE.charAt(i))) {
                 char nextSign = RE.charAt(i++);
-                if(insertSign(nextSign)) System.out.println(nextSign + " inserted.");
+                insertSign(nextSign);
                 refreshRoot();
             } else if(checkNum(String.valueOf(RE.charAt(i)))) {
                 int nextNum = 0;
@@ -54,7 +54,7 @@ public class ExpressionTree {
                     nextNum += Integer.parseInt(String.valueOf(RE.charAt(i++)));
                     if(i >= RE.length()) break;
                 } while(!checkSign(RE.charAt(i)));
-                if(insertNum(""+nextNum)) System.out.println(nextNum + " inserted.");
+                insertNum(""+nextNum);
                 refreshRoot();
             }
         }
@@ -64,7 +64,6 @@ public class ExpressionTree {
         if(this.root == null) {
             Node n = new Node(String.valueOf(c),null);
             this.root = n;
-            System.out.println(n.getValue()+" added. Parent: "+n.getParent());
             return true;
         } else {
             Node node = root;
@@ -77,17 +76,14 @@ public class ExpressionTree {
                     if (precedence(c) < precedence(node.getValue().charAt(0))) {
                         Node newNode = new Node(String.valueOf(c), node, null, node.getParent());
                         if (node.getParent() != null) node.getParent().setRhsNode(newNode);
-                        System.out.println(newNode.getValue()+" added. Parent: "+newNode.getParent());
                         return node.setParent(newNode);
                     } else {
                         if(node.getLhsNode() == null) {
                             Node n = new Node(String.valueOf(c),node);
-                            System.out.println(n.getValue()+" added. Parent: "+n.getParent());
                             return node.setLhsNode(n);
                         }
                         if (node.getRhsNode() == null) {
                             Node n = new Node(String.valueOf(c),node);
-                            System.out.println(n.getValue()+" added. Parent: "+n.getParent());
                             return node.setRhsNode(n);
                         }
                         node = node.getRhsNode();
@@ -96,7 +92,6 @@ public class ExpressionTree {
                     Node newNode = new Node(String.valueOf(c), node.getParent());
                     newNode.setLhsNode(node);
                     if(node.getParent() != null) node.getParent().setRhsNode(newNode);
-                    System.out.println(newNode.getValue()+" added. Parent: "+newNode.getParent());
                     return node.setParent(newNode);
                 }
             }
@@ -116,12 +111,10 @@ public class ExpressionTree {
 
                      if(node.getLhsNode() == null) {
                          Node n = new Node(String.valueOf(c),node);
-                         System.out.println(n.getValue()+" added. Parent: "+n.getParent());
                          return node.setLhsNode(n);
                      }
                      if (node.getRhsNode() == null) {
                          Node n = new Node(String.valueOf(c),node);
-                         System.out.println(n.getValue()+" added. Parent: "+n.getParent());
                          return node.setRhsNode(n);
                      }
                      node = node.getRhsNode();
@@ -140,17 +133,6 @@ public class ExpressionTree {
             printTree(n.getLhsNode());
             printTree(n.getRhsNode());
         }
-     }
-     public void printParents() {
-         parents(root);
-     }
-
-     private void parents(Node n) {
-         if(n != null) {
-             System.out.println("Value: " + n+" Parent: "+n.getParent());
-             parents(n.getLhsNode());
-             parents(n.getRhsNode());
-         }
      }
 
 }
