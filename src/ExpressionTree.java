@@ -1,10 +1,15 @@
 public class ExpressionTree {
     private final String RE;
     private Node root;
+    private boolean isOkExp;
+    private double expValue;
 
     public ExpressionTree(String RE) {
         this.RE = RE;
         this.root = null;
+    }
+    public double getExpValue() {
+        return expValue;
     }
 
     private void refreshRoot() {
@@ -13,7 +18,7 @@ public class ExpressionTree {
 
      private boolean checkSign(char c) {
         if((int)c == 46) return false;
-        return ((int)c >= 42 && (int)c <= 47);
+        return ((int)c >= 42 && (int)c <= 47 || (int)c == 94);
      }
 
      private int precedence(char c) {
@@ -22,6 +27,7 @@ public class ExpressionTree {
              case 45 -> 1;
              case 47 -> 2;
              case 42 -> 3;
+             case 94 -> 4;
              default -> -1;
          };
      }
@@ -89,8 +95,40 @@ public class ExpressionTree {
         if (node.getRhsNode() == null) return node.setRhsNode(new Node(c,node));
         return false;
     }
+
+    public boolean getValue() {
+        this.expValue = calculateValue(this.root);
+        return this.isOkExp;
+    }
+    private double calculateValue(Node node) {
+        try {
+            this.isOkExp = true;
+            if (checkSign(node.getValue().charAt(0))) {
+                switch ((int) node.getValue().charAt(0)) {
+                    case 43:
+                        return (calculateValue(node.getLhsNode()) + calculateValue(node.getRhsNode()));
+                    case 45:
+                        return (calculateValue(node.getLhsNode()) - calculateValue(node.getRhsNode()));
+                    case 47:
+                        return (calculateValue(node.getLhsNode()) / calculateValue(node.getRhsNode()));
+                    case 42:
+                        return (calculateValue(node.getLhsNode()) * calculateValue(node.getRhsNode()));
+                    case 94:
+                        return Math.pow(calculateValue(node.getLhsNode()), calculateValue(node.getRhsNode()));
+                    default: this.isOkExp = false; return 0;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Expression not ok.");
+            this.isOkExp = false;
+            return 0;
+        }
+        return Double.parseDouble(node.getValue());  // Here should use try..catch number parsing NumberException
+    }
+
      public void initializePrinting() {
-        printTree(root);
+        printTree(this.root);
+        System.out.println();
      }
      private void printTree(Node n) {
         if(n != null) {
